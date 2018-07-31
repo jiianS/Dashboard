@@ -54,16 +54,19 @@ public class HomeController {
 		HashMap<String, Object> columnMap = new HashMap<String, Object>();
 		columnMap.put("type", "string");
 		columnMap.put("value", "city");
+		columnMap.put("column", "city");
 		columns.add(columnMap);
 		
 		columnMap = new HashMap<String, Object>();
 		columnMap.put("type", "number");
-		columnMap.put("value", "Population2000");
+		columnMap.put("value", "2000 Population");
+		columnMap.put("column", "Population2000");
 		columns.add(columnMap);
 		
 		columnMap = new HashMap<String, Object>();
 		columnMap.put("type", "number");
-		columnMap.put("value", "Population2000");
+		columnMap.put("value", "2010 Population");
+		columnMap.put("column", "Population2010");
 		columns.add(columnMap);
 		
 //		같은 주소에 넣게 하지 않기 위해, columnMap을 새로 생성해서 각각 넣어준다. 

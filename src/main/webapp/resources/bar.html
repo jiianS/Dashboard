@@ -30,16 +30,17 @@
 					for (var i = 0; i < columns.length; i++) {
 						chartData.addColumn(columns[i].type, columns[i].value);
 					}
-					// chart 데이터 설정
+					
+					// chart 데이터 설정 _> 동적으로 데이터를 받을 수 있게 변경 , column을 추가하려면 HomeController만 수정하면 된다
 					$.each(result, function(index, value) {
-						for ( var column in value) {
-							var city = value.city;
-							var Population2000 = value.Population2000;
-							var Population2010 = value.Population2010;
-							//2차원 배열로 하고자 함 ([[]])
-							chartData.addRows([ [ city, Population2000,
-									Population2010 ] ]);
+						var data =[]
+						
+						for (var i=0; i<columns.length; i++) {
+							data[i] =  value[columns[i].column];
 						}
+						
+						chartData.addRows([ data ]);
+						
 					}); //.each
 
 					var options = {
