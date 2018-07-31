@@ -6,4 +6,10 @@
   <select id="selectBar" resultType="HashMap">
     select * from bar
   </select>
+  
+  <select id="selectMelon" resultType="HashMap" >
+    <!-- select `type`, `value`,`column` from melon where viewNm = #{viewNm} -->
+    select * from melon; 
+  </select>
+  
 </mapper>

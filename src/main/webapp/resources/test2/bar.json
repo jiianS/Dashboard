@@ -1,0 +1,13 @@
+ {
+      "title" : "Melon _ 장르별 !",
+      "chartArea": {
+         "width": "50%"
+      },
+      "hAxis": {
+        "title": "평균",
+        "minValue": 0
+      },
+      "vAxis": {
+        "title": "장르"
+      }
+}

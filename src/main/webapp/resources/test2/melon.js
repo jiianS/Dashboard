@@ -1,7 +1,8 @@
 var viewList = [
-	{dataURL : "/eis/getBar", OptionURL : "/eis/resources/test/bar.json",type :"BC" },
-	{dataURL : "/eis/getBar", OptionURL : "/eis/resources/test/column.json",type :"CC" },
-	{dataURL : "/eis/getBar", OptionURL : "/eis/resources/test/combo.json",type :"CBC" },
+	{dataURL : "/eis/getMelon", OptionURL : "/eis/resources/test2/bubble.json", type :"BUBC" },
+	{dataURL : "/eis/getMelon", OptionURL : "/eis/resources/test2/bar.json", type :"BC" },
+	{dataURL : "/eis/getMelon", OptionURL : "/eis/resources/test2/column.json", type :"CC"},
+	{dataURL : "/eis/getMelon", OptionURL : "/eis/resources/test2/combo.json", type :"CBC" },
 ];
 
 
@@ -55,8 +56,11 @@ function drawGoogle(key) {
 					
 					var chart = null;
 					
-					//BC -> 바차트 / CC => 컬럼 차트 
-					if("BC" == type){
+					//BC -> 바차트 / CC => 컬럼 차트
+					if("BUBC" == type){
+						chart = new google.visualization.BubbleChart(document.getElementById(target));					
+					}
+					else if("BC" == type){
 						chart = new google.visualization.BarChart(document.getElementById(target));  
 					}else if("CC"== type){
 						chart = new google.visualization.ColumnChart(document.getElementById(target));

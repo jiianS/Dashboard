@@ -94,5 +94,55 @@ public class HomeController {
 				
 	}
 
+	
+	@RequestMapping("getMelon")
+	public void getMelon(HttpServletResponse resp) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		List<HashMap<String, Object>> resultList = session.selectList("eis.selectMelon");
+		List<HashMap<String, Object>> columns = new ArrayList<HashMap<String,Object>>();
+		
+		HashMap<String, Object> columnMap = new HashMap<String, Object>();
+		columnMap.put("type", "string");
+		columnMap.put("value", "genre");
+		columnMap.put("column", "genre");
+		columns.add(columnMap);
+		
+		columnMap = new HashMap<String, Object>();
+		columnMap.put("type", "number");
+		columnMap.put("value", "2015_10월 평균");
+		columnMap.put("column", "avg201510");
+		columns.add(columnMap);
+		
+		columnMap = new HashMap<String, Object>();
+		columnMap.put("type", "number");
+		columnMap.put("value", "2016_10월 평균");
+		columnMap.put("column", "avg201610");
+		columns.add(columnMap);
+		
+		columnMap = new HashMap<String, Object>();
+		columnMap.put("type", "number");
+		columnMap.put("value", "2017_10월 평균");
+		columnMap.put("column", "avg201710");
+		columns.add(columnMap);
+		
+		
+		result.put("result",resultList);
+		result.put("size",resultList.size());
+		result.put("columns", columns);
+		
+		
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/json;charset=utf-8");
+		JSONObject json = new JSONObject();
+		json = JSONObject.fromObject(JSONSerializer.toJSON(result));
+		
+		try {
+			resp.getWriter().write(json.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 

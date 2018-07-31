@@ -1,0 +1,10 @@
+{
+    "title": "Melon 장르별 평균",
+    "isStacked": "true",
+    "hAxis": {
+      "title": "장르"
+    },
+    "vAxis": {
+      "title": "평균"
+    }
+}

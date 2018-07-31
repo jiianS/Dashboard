@@ -1,0 +1,7 @@
+{
+      "title" : "Monthly Coffee Production by Country",
+      "vAxis": {"title": "Population" },
+      "hAxis": {"title": "City"},
+      "seriesType": "bars",
+      "series": {"1": {"type": "line"}}
+ }

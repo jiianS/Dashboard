@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Bar Chart</title>
+<title>Melon Chart</title>
 <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="/eis/resources/test/bar.js"></script>
+<script src="/eis/resources/test2/melon.js"></script>
 
 <script>
 
@@ -17,11 +17,11 @@ $(document).ready(function () {
 		if (index == 0){
 			//차트 초기화
 			$("#chart_body").empty();		
-		}else{	
+		}else{			
 			//bar 차트 호출
-			google.charts.load('current', {packages : [ 'corechart', 'bar' ]});
-			
+			google.charts.load('current', {packages : [ 'corechart', 'bar' ]});			
 			//js에서 viewList-> index 맞추기 위해 index-1
+			console.log(index);
 			google.charts.setOnLoadCallback(function() { drawGoogle(index - 1);	});
 		}
 		
@@ -32,6 +32,7 @@ $(document).ready(function () {
 </head>
 <body>
 	<button type="button">차트 초기화</button>
+	<button type="button">버블 차트 호출</button>
 	<button type="button">바 차트 호출</button>
 	<button type="button">컬럼 차트 호출</button>
 	<button type="button">콤보 차트 호출</button>	
