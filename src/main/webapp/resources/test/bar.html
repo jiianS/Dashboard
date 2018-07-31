@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bar Chart</title>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/eis/resources/test/bar.js"></script>
+
+<script>
+
+$(document).ready(function () {
+	$("button").on("click", function () {
+		var index = $("button").index(this);
+		
+		var id ="chart_" + $("#chart_body div").length;
+		var target = '<div id="'+ id +'"></div>';
+		
+		$("#chart_body").append(target);
+		
+		if (index == 0){
+			//bar 차트 호출
+			google.charts.load('current', {packages : [ 'corechart', 'bar' ]});
+			google.charts.setOnLoadCallback(function(){
+				drawMultSeries("/eis/getBar","/eis/resources/test/bar.json",id);
+			});
+		}else if(index == 1){
+			// 컬럼 차트 호출			
+		}else{
+			//차트 초기화
+			$("#chart_body").empty();	
+		}
+		
+	});
+});
+
+</script>
+</head>
+<body>
+	<button type="button">바 차트 호출</button>
+	<button type="button">컬럼 차트 호출</button>
+	<button type="button">차트 초기화</button>
+
+	<div id="chart_body">	</div>
+	
+
+</body>
+</html>
+
