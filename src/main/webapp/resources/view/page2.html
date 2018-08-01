@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Chart Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="/eis/resources/js/bar.js"></script>
+  <style>
+  	.h200 {height: 40vh;}
+  </style>
+  <script>
+  
+	var viewList = [
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC", target: "chart_1"},
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/column.json", type: "CC", target: "chart_2"},
+	];
+	
+	google.charts.load('current', {packages: ['corechart', 'bar']});
+	google.charts.setOnLoadCallback(function() {callChart(viewList);});
+
+  
+	//버튼 누를때마다 차트 변경하기
+	$(document).ready( function () {
+	
+		var click = false;
+		
+		$("#btn").on("click", function () {
+			$("#chart_1").empty();
+			
+			var dataList = [
+				{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC", target: "chart_1"},
+				{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/column.json", type: "CC", target: "chart_1"},
+			];
+			
+
+/*			if(viewList[0].type =="BC" ){
+				viewList[0].type ="CBC";
+			}else if (viewList[0].type =="CBC"){
+				viewList[0].type ="BC";
+			}
+			google.charts.setOnLoadCallback(function() {callChart(viewList);});*/
+			
+			
+			// 1. if문를 이용하여 처리하기. (data가많을 경우 1. 조건이 나음)
+ 			if(click){
+ 				google.charts.setOnLoadCallback(function() {drawGoogle(dataList[1]);});
+ 			}else{
+ 				google.charts.setOnLoadCallback(function() {drawGoogle(dataList[0]);});
+ 			}
+			
+			// 2. 삼항연산자를 이용한다.
+// 			google.charts.setOnLoadCallback(function() {drawGoogle(dataList[click?1:0]);});
+			
+			// 3. 논리형을 정수형으로 변환한다.
+//			google.charts.setOnLoadCallback(function() {drawGoogle(dataList[Number(click)]);});
+			
+			// 클릭 될때 마다 상태값이 반전 값으로 변경하기.
+			click = !click;
+			
+			
+		});
+	});
+	
+  </script>
+</head>
+<body>
+
+<div class="container">
+  <h1>Google Chart</h1>
+  <p>고정 화면</p>
+  <button type="button" id="btn">차트 변경</button>
+  <div class="row" id="chart_body">
+    <div class="col-sm-6 h200" id="chart_1">chart 1</div>
+    <div class="col-sm-6 h200" id="chart_2">chart 2</div>
+  </div>
+</div>
+
+</body>
+</html>

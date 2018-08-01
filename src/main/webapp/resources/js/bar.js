@@ -1,20 +1,28 @@
-// 차트 목록 정의
-var viewList = [
-	{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC"},
-	{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/column.json", type: "CC"},
-	{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/combo.json", type: "CBC"},
-	{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC"}
-];
 
-// 구글 차트 함수(인덱스값)
-var drawGoogle = function(key) {
+// 차트 반복 호출하기
+var callChart = function(list) {
+	
+	for(var i = 0; i < list.length; i++){
+		// 데이터 가져오기.
+		drawGoogle(list[i]);
+	}
+}
 
-	// 차트 삽입 될 대상 추가 하기.
-	var target = "chart_" + (key+1);
+var selectChart=function(index){
+	drawGoogle(index);
+	console.log(index);
+}
+
+
+
+var drawGoogle = function(data){	
+	
 	// 정의 되어 있는 차트 목록에서 선택한 정보 가져오기.
-	var dataURL = viewList[key].dataURL;
-	var OptionURL = viewList[key].OptionURL;
-	var type = viewList[key].type;
+	var target = data.target;
+	var dataURL = data.dataURL;
+	var OptionURL = data.OptionURL;
+	var type = data.type;
+	
 	
 	// 데이터 가져오기.
 	$.post(dataURL).done(function(data) {

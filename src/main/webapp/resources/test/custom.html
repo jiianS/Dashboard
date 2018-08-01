@@ -1,0 +1,78 @@
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <title>custom Chart</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      $(document).ready(function () {
+    	
+    		google.charts.load('current');
+			google.charts.setOnLoadCallback(drawVisualization);
+
+    		
+        	var option ={
+       			chartType: 'BarChart',
+       	        dataTable: [['', 'Germany', 'USA', 'Brazil', 'Canada', 'France', 'RU'],
+       	                      ['', 700, 300, 400, 500, 600, 800]],
+       	        options: {'title': 'Countries'},
+       	        containerId: 'vis_div'   	        
+        	}
+        	
+       	 function drawVisualization() {
+            var wrapper = new google.visualization.ChartWrapper(option);
+            wrapper.draw();
+         // 데이터 가져오기.
+    		$.post("eis/getData/google").done(function(data) {
+    			// json 데이터 변수 담기
+    			var result = data.result;
+    			var columns = data.columns;
+    			var size = data.size;
+    			// 컬럼 정보 확인 (예외처리)
+    			if(columns.length == 0){
+    				alert("잘못된 호출 입니다.");
+    				return false;
+    			}
+    			// 구글 차트에 사용 할 데이터 만들기
+    			var chartData = new google.visualization.DataTable();
+    			// 컬럼 데이터 설정
+    			$.each(columns, function(index, value) {
+    				chartData.addColumn(value.type, value.value);
+    			});
+    			// 차트 데이터 설정
+    			$.each(result, function(index, value) {
+    				var row = [];
+    				for(var i = 0; i < columns.length; i++){
+    					row[i] = value[columns[i].column];
+    				}
+    				chartData.addRows([ row ]);
+    			});
+    			
+    			option.dataTable = chartData;
+    		});
+          }
+    	  
+    	  
+    	  var check = false;
+    	  $("#btn").on("click",function(){
+    		  
+    		 if(check) {
+    			 option.chartType ="BarChart";
+    		 }else{
+    			 option.chartType ="ColumnChart";
+    		 }
+    		 google.charts.setOnLoadCallback(drawVisualization);
+    		 
+    		 check = !check;
+    	  });    	  
+      });
+      
+    </script>
+  </head>
+  
+  <body style="font-family: Arial;border: 0 none;">
+  	<button type="button" id="btn">차트변경</button>
+    <div id="vis_div" style="width: 600px; height: 400px;"></div>
+  </body>
+</html>

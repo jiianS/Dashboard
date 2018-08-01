@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Chart Example</title>
   <meta charset="utf-8">
@@ -9,34 +9,34 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="/eis/resources/js/bar.js"></script>
-  
- <script>
-		google.charts.load('current', {packages: ['corechart', 'bar']});
-		google.charts.setOnLoadCallback(function() {drawGoogle(0);});
-		google.charts.setOnLoadCallback(function() {drawGoogle(1);});
-		google.charts.setOnLoadCallback(function() {drawGoogle(2);});
-		google.charts.setOnLoadCallback(function() {drawGoogle(3);});
-		
-</script>
-  
   <style>
-  	.h200 {
-  		height: 400px;
-  	}
+  	.h200 {height: 40vh;}
   </style>
+  <script>
+	//차트 목록 정의
+	var viewList = [
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC", target: "chart_1"},
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/column.json", type: "CC", target: "chart_2"},
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/combo.json", type: "CBC", target: "chart_3"},
+		{dataURL: "/eis/getData/google", OptionURL: "/eis/resources/test/bar.json", type: "BC", target: "chart_4"}
+	];
+  	google.charts.load('current', {packages: ['corechart', 'bar']});
+	google.charts.setOnLoadCallback(function() {callChart(viewList);});
+  </script>
 </head>
-
 <body>
 
 <div class="container">
   <h1>Google Chart</h1>
-  <p></p>
-  <div class="row" id ="chart_body">
-    <div class="col-sm-6 h200" style="background-color:lavender;" id="chart_1">chart 1</div>
-    <div class="col-sm-6 h200" style="background-color:lavenderblush;"id="chart_2">chart 2</div>
-    <div class="col-sm-6 h200" style="background-color:lavenderblush;"id="chart_3">chart 3</div>
-    <div class="col-sm-6 h200" style="background-color:lavender;"id="chart_4">chart 4</div>
+  <p>고정 화면</p>
+  
+  <div class="row" id="chart_body">
+    <div class="col-sm-6 h200" id="chart_1">chart 1</div>
+    <div class="col-sm-6 h200" id="chart_2">chart 2</div>
+    <div class="col-sm-6 h200" id="chart_3">chart 3</div>
+    <div class="col-sm-6 h200" id="chart_4">chart 4</div>
   </div>
 </div>
+
 </body>
 </html>
