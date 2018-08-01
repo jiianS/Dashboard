@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -42,6 +43,7 @@ public class HomeController {
 
 	@Resource(name = "sqlSession")
 	SqlSession session;
+	
 
 	@RequestMapping("getBar")
 	public void getBar(HttpServletResponse resp) {
@@ -94,6 +96,26 @@ public class HomeController {
 				
 	}
 
+	// 0801 __ 수정된 부분
+	@RequestMapping(value = "getData/{viewNm}", method = RequestMethod.POST)
+	public void getData(@PathVariable("viewNm") String viewNm, HttpServletResponse resp) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		List<HashMap<String, Object>> resultList = session.selectList("eis.selectBar");
+		
+		result.put("result", resultList);
+		result.put("size", resultList.size());
+		result.put("columns", session.selectList("eis.selectColumnList", viewNm));
+		
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/json;charset=utf-8");
+		JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(result));
+		try {
+			resp.getWriter().write(json.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	@RequestMapping("getMelon")
 	public void getMelon(HttpServletResponse resp) {
