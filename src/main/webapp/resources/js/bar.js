@@ -8,12 +8,6 @@ var callChart = function(list) {
 	}
 }
 
-var selectChart=function(index){
-	drawGoogle(index);
-	console.log(index);
-}
-
-
 
 var drawGoogle = function(data){	
 	

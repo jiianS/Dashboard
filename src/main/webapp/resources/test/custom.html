@@ -20,9 +20,10 @@
        	        containerId: 'vis_div'   	        
         	}
         	
+        	var wrapper = null;
+        	
        	 function drawVisualization() {
-            var wrapper = new google.visualization.ChartWrapper(option);
-            wrapper.draw();
+            
          // 데이터 가져오기.
     		$.post("eis/getData/google").done(function(data) {
     			// json 데이터 변수 담기
@@ -50,19 +51,22 @@
     			});
     			
     			option.dataTable = chartData;
+    			wrapper = new google.visualization.ChartWrapper(option);
+                wrapper.draw();
     		});
           }
     	  
-    	  
+    	  //버튼 눌렀을떄, 차트 변경되도록 클릭 변수에 boolean값을 줘서 변경하기
     	  var check = false;
     	  $("#btn").on("click",function(){
-    		  
-    		 if(check) {
+    		  option.chartType = check ? "BarChart" :"ColumnChart";
+/*     		 if(check) {
     			 option.chartType ="BarChart";
     		 }else{
     			 option.chartType ="ColumnChart";
-    		 }
-    		 google.charts.setOnLoadCallback(drawVisualization);
+    		 } */
+    		 wrapper = new google.visualization.ChartWrapper(option);
+             wrapper.draw();
     		 
     		 check = !check;
     	  });    	  
