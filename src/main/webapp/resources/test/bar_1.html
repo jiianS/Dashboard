@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bar Chart</title>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/eis/resources/test/bar_1.js"></script>
+
+<script>
+
+$(document).ready(function () {
+	$("button").on("click", function () {
+		var index = $("button").index(this);
+		
+		if (index == 0){
+			//차트 초기화
+			$("#chart_body").empty();		
+		}else{	
+			//bar 차트 호출
+			google.charts.load('current', {packages : [ 'corechart', 'bar' ]});
+			
+			//js에서 viewList-> index 맞추기 위해 index-1
+			google.charts.setOnLoadCallback(function() { drawGoogle(index - 1);	});
+		}
+		
+	});
+});
+
+</script>
+</head>
+<body>
+	<button type="button">차트 초기화</button>
+	<button type="button">바 차트 호출</button>
+	<button type="button">컬럼 차트 호출</button>
+	<button type="button">콤보 차트 호출</button>	
+
+	<div id="chart_body">	</div>
+	
+
+</body>
+</html>
+

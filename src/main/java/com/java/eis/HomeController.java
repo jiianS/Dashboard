@@ -98,6 +98,8 @@ public class HomeController {
 
 	// 0801 __ 수정된 부분
 	@RequestMapping(value = "getData/{viewNm}", method = RequestMethod.POST)
+//	@RequestMapping(value = "getData/{viewNm}")  get일경우 -> /eis/getData/google -> json타입으로 나옴
+//	post -> 405에러 나옴(post방식이기에 데이터가 보여질 수 없다)
 	public void getData(@PathVariable("viewNm") String viewNm, HttpServletResponse resp) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		List<HashMap<String, Object>> resultList = session.selectList("eis.selectBar");
