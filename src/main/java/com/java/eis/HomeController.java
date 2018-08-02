@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.session.SqlSession;
@@ -92,32 +93,8 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-				
-				
 	}
 
-	// 0801 __ 수정된 부분
-	@RequestMapping(value = "getData/{viewNm}", method = RequestMethod.POST)
-//	@RequestMapping(value = "getData/{viewNm}")  get일경우 -> /eis/getData/google -> json타입으로 나옴
-//	post -> 405에러 나옴(post방식이기에 데이터가 보여질 수 없다)
-	public void getData(@PathVariable("viewNm") String viewNm, HttpServletResponse resp) {
-		HashMap<String, Object> result = new HashMap<String, Object>();
-		List<HashMap<String, Object>> resultList = session.selectList("eis.selectBar");
-		
-		result.put("result", resultList);
-		result.put("size", resultList.size());
-		result.put("columns", session.selectList("eis.selectColumnList", viewNm));
-		
-		resp.setCharacterEncoding("UTF-8");
-		resp.setContentType("text/json;charset=utf-8");
-		JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(result));
-		try {
-			resp.getWriter().write(json.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	
 	@RequestMapping("getMelon")
 	public void getMelon(HttpServletResponse resp) {
@@ -167,6 +144,37 @@ public class HomeController {
 			e.printStackTrace();
 		}
 	}
+	
+	// 0801 __ 수정된 부분
+	@RequestMapping(value = "getData/{viewNm}", method = RequestMethod.POST)
+//	@RequestMapping(value = "getData/{viewNm}")  get일경우 -> /eis/getData/google -> json타입으로 나옴
+//	post -> 405에러 나옴(post방식이기에 데이터가 보여질 수 없다)
+	public void getData(@PathVariable("viewNm") String viewNm, HttpServletResponse resp) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		List<HashMap<String, Object>> resultList = session.selectList("eis.selectBar");
+		
+		result.put("result", resultList);
+		result.put("size", resultList.size());
+		result.put("columns", session.selectList("eis.selectColumnList", viewNm));
+		
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/json;charset=utf-8");
+		JSONObject json = JSONObject.fromObject(JSONSerializer.toJSON(result));
+		try {
+			resp.getWriter().write(json.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 이미지는 길기떄문에 무조건 POST로 와야함
+	@RequestMapping(value="getImg", method = RequestMethod.POST)
+	public void getImg(HttpServletRequest req) {
+		String imgData = req.getParameter("imgData");
+		System.out.println(imgData);
+		
+	}
+	
 	
 }
 
