@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <style>
-  	.h200 {height: 40vh;}
+  	.h200 {height: 400px;}
   </style>
   <script>
   $(document).ready(function(){
@@ -27,11 +27,17 @@
           options: {'title': 'Countries'},
           containerId: 'chart_2'
         }},
+        {dataURL: "/eis/getData/google", 
+   		 Option: {
+             chartType: 'BarChart',
+             options: {'title': 'Countries'},
+             containerId: 'chart_3'
+         }}
 	];
 	  
 	  google.charts.load('current');
 	  google.charts.setOnLoadCallback(drawVisualization);
-      var wrapper = null;
+      var wrapper = {};
       var option = {};
       
       function drawVisualization() {
@@ -39,9 +45,11 @@
     		  getData(viewList[i], i);
     	  }
      }
+      
      function getData(row, index){
     	 var dataURL = row.dataURL;
     	 option[index] = row.Option;
+    	 
     	 $.post(dataURL).done(function(data) {
    			// json 데이터 변수 담기
    			var result = data.result;
@@ -68,18 +76,28 @@
    			});
    			
    			option[index].dataTable = chartData;
-   			wrapper = new google.visualization.ChartWrapper(option[index]);
-            wrapper.draw();      			
+   			wrapper[index] = new google.visualization.ChartWrapper(option[index]);
+            wrapper[index].draw();      			
    	  });
      }
 	  
-	 var check = false;
 	 $("button").on("click", function(){
-		 var index = $("button").index(this);
-		 option[index].chartType = check ? "BarChart" : "ColumnChart";
-		 wrapper = new google.visualization.ChartWrapper(option[index]);
-         wrapper.draw();
-		 check = !check;
+		var imgList = [];
+		 for (var i=0; i<viewList.length; i++){
+			 var chart = wrapper[i].getChart();			
+			 imgList[i] = chart.getImageURI();
+		 }
+		 
+		 console.log(imgList);
+		 $.ajax({
+			 type : "post",
+			url:"/eis/getImgList",
+			data : {"imgData" :  JSON.stringify(imgList)}
+		}).always(function () {
+			console.log("imgDAATA :OK" )
+		});
+
+		 
 	 });
   });
   </script>
@@ -89,11 +107,11 @@
 <div class="container">
   <h1>Google Chart</h1>
   <p>고정 화면</p>
-  <button type="button">차트1변경</button>
-  <button type="button">차트2변경</button>
+  <button type="button">이미지변경</button>
   <div class="row" id="chart_body">
     <div class="col-sm-6 h200" id="chart_1">chart 1</div>
     <div class="col-sm-6 h200" id="chart_2">chart 2</div>
+    <div class="col-sm-6 h200" id="chart_3">chart 3</div>
   </div>
 </div>
 

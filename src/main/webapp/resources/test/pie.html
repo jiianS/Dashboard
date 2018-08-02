@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>pie chart</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+	#chart_body{ height: 400px;}
+</style>
+
+<script>
+google.charts.load('current');
+google.charts.setOnLoadCallback(drawVisualization);
+
+var option = {
+    chartType: 'PieChart',
+    options: {'title': 'Countries'},
+    containerId: 'chart_body',
+   
+  };
+var wrapper = null;
+var target =1;
+var dataSource = {};
+
+
+function drawVisualization() {
+     $.post("/eis/getData/google").done(function(data) {
+    	 dataSource =data;
+        createView();
+     });
+} 
+
+function createView(data){
+	 // json 데이터 변수 담기
+    var result = dataSource.result;
+    // 2000년도 -> 2010
+    var cols = dataSource.columns;
+    var columns =[];
+    
+    $.each(cols, function(index, value) {			
+   	 if(index == 0 || index == target){
+   		 columns.push(cols[index]);
+   	 }
+    });
+    
+    var size = dataSource.size;
+    
+    // 컬럼 정보 확인 (예외처리)
+    if(columns.length == 0){
+       alert("잘못된 호출 입니다.");
+       return false;
+    }
+    // 구글 차트에 사용 할 데이터 만들기
+    var chartData = new google.visualization.DataTable();
+    
+    // 컬럼 데이터 설정
+    $.each(columns, function(index, value) {
+       chartData.addColumn(value.type, value.value); 
+    });
+    
+    // 차트 데이터 설정
+    $.each(result, function(index, value) {
+       var row = [];
+       for(var i = 0; i < columns.length; i++){
+          row[i] = value[columns[i].column];
+          
+       }
+       chartData.addRows([ row ]);
+
+    });
+    option.dataTable = chartData;
+    wrapper = new google.visualization.ChartWrapper(option);
+    wrapper.draw();
+}
+
+$(document).ready(function () {
+	//데이터 변경
+	var check = false;
+	$("#btn1").on("click", function () {
+		if(check){
+			target =1;
+		}else{	//target=2
+			target =2;
+		}
+		
+		createView(target);
+		check = !check
+	});
+	
+	//차트 변경
+	var check2 = false;
+	$("#btn2").on("click", function () {
+		if(check2){
+			option.options.pieHole = 'none'
+		}else{	//target=2
+			option.options.pieHole = '0.4'
+		}
+		
+		createView();
+		check2 = !check2
+	});
+	
+});
+</script>
+</head>
+<body>
+   <button type="button" id="btn1">데이터 변경(2000/2010)</button>
+   <button type="button" id="btn2">차트변경</button>
+   <div id="chart_body"></div>
+</body>
+</html>
+

@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script src="/eis/resources/js/html2canvas.min.js"></script>
   <style>
   	.h200 {height: 40vh;}
   </style>
@@ -27,11 +28,17 @@
           options: {'title': 'Countries'},
           containerId: 'chart_2'
         }},
+        {dataURL: "/eis/getData/google", 
+   		 Option: {
+             chartType: 'ColumnChart',
+             options: {'title': 'Countries'},
+             containerId: 'chart_3'
+           }},
 	];
 	  
 	  google.charts.load('current');
 	  google.charts.setOnLoadCallback(drawVisualization);
-      var wrapper = null;
+      var wrapper = {};
       var option = {};
       
       function drawVisualization() {
@@ -68,19 +75,35 @@
    			});
    			
    			option[index].dataTable = chartData;
-   			wrapper = new google.visualization.ChartWrapper(option[index]);
-            wrapper.draw();      			
+   			wrapper[index] = new google.visualization.ChartWrapper(option[index]);
+            wrapper[index].draw();      			
    	  });
      }
+     
+     //화면 전체 저장하기 (html2canvas 이용)
+     $("button").on("click", function(){
+    	 html2canvas(document.querySelector("#chart_body")).then(function (canvas) {
+  		 	//console.log("toDataURL()	" + canvas.toDataURL());   
+   		 	//$(".container").append(canvas);
+    		 	
+   		 	$.ajax({
+  				type : "post",
+   				url:"/eis/getImg",
+   				data : {"imgData" :  canvas.toDataURL()}
+   			}).done(function (data) {
+   				if(data.status == 1){
+   					alert("파일 저장이 완료되었습니다")
+   					window.open(data.url);
+   				}else{
+  					alert("파일 저장이 실패되었습니다")
+   				}
+   				
+			}).always(function () {
+   				console.log("imgDAATA :OK" )
+   			});
+    	});
+     });
 	  
-	 var check = false;
-	 $("button").on("click", function(){
-		 var index = $("button").index(this);
-		 option[index].chartType = check ? "BarChart" : "ColumnChart";
-		 wrapper = new google.visualization.ChartWrapper(option[index]);
-         wrapper.draw();
-		 check = !check;
-	 });
   });
   </script>
 </head>
@@ -89,11 +112,11 @@
 <div class="container">
   <h1>Google Chart</h1>
   <p>고정 화면</p>
-  <button type="button">차트1변경</button>
-  <button type="button">차트2변경</button>
+  <button type="button">이미지 저장</button>
   <div class="row" id="chart_body">
     <div class="col-sm-6 h200" id="chart_1">chart 1</div>
     <div class="col-sm-6 h200" id="chart_2">chart 2</div>
+    <div class="col-sm-6 h200" id="chart_3">chart 3</div>
   </div>
 </div>
 
