@@ -5,29 +5,41 @@
 <title>pie chart</title>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<style>
-	#chart_body{ height: 400px;}
-</style>
+
 
 <script>
 google.charts.load('current');
 google.charts.setOnLoadCallback(drawVisualization);
 
-var option = {
-    chartType: 'PieChart',
-    options: {'title': 'Countries'},
-    containerId: 'chart_body',
-   
-  };
+var option =[
+	{	
+		chartType: 'PieChart',
+		options: {'title': 'Countries', pieHole: 0.5 },
+	   	containerId: 'chart1',
+	}
+	,{
+		chartType: 'PieChart',
+	   	options: {'title': 'Countries'},
+	   	containerId: 'chart2',
+	}
+	
+];
 var wrapper = null;
-var target =1;
-var dataSource = {};
+var target = 1;
 
+var dataSource = {};
+var temp =[];
 
 function drawVisualization() {
      $.post("/eis/getData/google").done(function(data) {
-    	 dataSource =data;
-        createView();
+    	dataSource =data;
+    	
+    	for(var i=0; i < option.length; i++){
+    		temp = option[i];
+    		target = target + i;
+    		createView();
+    	}
+    	
      });
 } 
 
@@ -39,10 +51,10 @@ function createView(data){
     var columns =[];
     
     $.each(cols, function(index, value) {			
-   	 if(index == 0 || index == target){
-   		 columns.push(cols[index]);
-   	 }
-    });
+      	 if(index == 0 || index == target){
+      		 columns.push(cols[index]);
+		 }
+      });
     
     var size = dataSource.size;
     
@@ -64,50 +76,24 @@ function createView(data){
        var row = [];
        for(var i = 0; i < columns.length; i++){
           row[i] = value[columns[i].column];
-          
        }
        chartData.addRows([ row ]);
-
     });
-    option.dataTable = chartData;
-    wrapper = new google.visualization.ChartWrapper(option);
-    wrapper.draw();
+    
+    	
+		temp.dataTable = chartData;
+		console.log(temp)
+	    wrapper = new google.visualization.ChartWrapper(temp);
+	    wrapper.draw();
 }
 
-$(document).ready(function () {
-	//데이터 변경
-	var check = false;
-	$("#btn1").on("click", function () {
-		if(check){
-			target =1;
-		}else{	//target=2
-			target =2;
-		}
-		
-		createView(target);
-		check = !check
-	});
-	
-	//차트 변경
-	var check2 = false;
-	$("#btn2").on("click", function () {
-		if(check2){
-			option.options.pieHole = 0
-		}else{	//target=2
-			option.options.pieHole = '0.4'
-		}
-		
-		createView();
-		check2 = !check2
-	});
-	
-});
+
+
 </script>
 </head>
 <body>
-   <button type="button" id="btn1">데이터 변경(2000/2010)</button>
-   <button type="button" id="btn2">차트변경</button>
-   <div id="chart_body"></div>
+  <div class="row" id="chart1">  </div>
+  <div class="row" id="chart2">  </div>
 </body>
 </html>
 
